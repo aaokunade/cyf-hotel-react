@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Moment from "moment";
 const TouristInfoCards = () => {
   return (
@@ -83,12 +83,10 @@ const SearchResults = props => {
   const bookingDetails = props.results;
   console.log(bookingDetails);
   const bookingKeys = Object.keys(bookingDetails[0]);
-  // console.log(bookingKeys[1]);
-
   return (
     <div>
-      <table className="table table-striped table table-bordered">
-        <thead className="primary">
+      <table className="table table-striped table-bordered">
+        <thead className="table table-danger thead-light">
           <tr>
             {bookingKeys.map(bookingKey => (
               <th scope="col" key={bookingKey}>
@@ -101,20 +99,17 @@ const SearchResults = props => {
         </thead>
         <tbody>
           {bookingDetails.map((bookingDetail, i) => {
-            return (
-              <tr key={i}>
-                {bookingKeys.map(bookingKey => (
-                  <td key={bookingKey}> {bookingDetail[bookingKey]}</td>
-                ))}
+            // const [color, setColor] = useState(false);
 
-                <td>
-                  {Moment.duration(
-                    Moment(bookingDetail["checkOutDate"]).diff(
-                      Moment(bookingDetail["checkInDate"])
-                    )
-                  ).asDays()}
-                </td>
-              </tr>
+            // const changeColor = () => {
+            //   console.log(color);
+            // }
+            return (
+              <TableRow
+                i={i}
+                bookingKeys={bookingKeys}
+                bookingDetail={bookingDetail}
+              />
             );
           })}
         </tbody>
@@ -122,6 +117,27 @@ const SearchResults = props => {
     </div>
   );
   // console.log(bookingKey);
+};
+
+const TableRow = props => {
+  const bookingKeys = props.bookingKeys;
+  const bookingDetail = props.bookingDetail;
+
+  return (
+    <tr key={props.i}>
+      {props.bookingKeys.map(bookingKey => (
+        <td key={bookingKey}> {props.bookingDetail[bookingKey]}</td>
+      ))}
+
+      <td>
+        {Moment.duration(
+          Moment(props.bookingDetail["checkOutDate"]).diff(
+            Moment(props.bookingDetail["checkInDate"])
+          )
+        ).asDays()}
+      </td>
+    </tr>
+  );
 };
 
 export default { TouristInfoCards, Heading, SearchResults, Footer };
